@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using System;
+using TMPro;
 public class PlayerInteract : MonoBehaviour
 {
     public static PlayerInteract Instance;
@@ -27,6 +28,7 @@ public class PlayerInteract : MonoBehaviour
     [Header("CursorUI")]
     [SerializeField] GameObject CursorUI;
     [SerializeField] GameObject InteractUI;
+    [SerializeField] TextMeshProUGUI InteractTextUI;
 
     public event EventHandler OnInteract;
     private Vector3 defaultGrabPoint;
@@ -147,6 +149,8 @@ public class PlayerInteract : MonoBehaviour
             {
                 CursorUI.SetActive(false);
                 InteractUI.SetActive(true);
+                InteractTextUI.text = Interactable.TextUI;
+                InteractTextUI.fontSize= Interactable.TextSizeUI;
             }
             else
             {

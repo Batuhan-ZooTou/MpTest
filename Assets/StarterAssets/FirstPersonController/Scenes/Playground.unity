@@ -161,18 +161,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4381e6f18ed9e9b42b0faf6eb4ef56ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectRigidbody: {fileID: 475244312}
+  isActive: 0
+  UIText: LMB
   objectGrabPointTransform: {fileID: 0}
-  moveSpeed: 1000
-  snapped: 0
-  HalfSize: 0.125
-  Grounded: 1
-  GroundedDistance: 0.001
-  halfExtent: {x: 0, y: 0, z: 0}
+  objectRigidbody: {fileID: 475244312}
   GroundLayers:
     serializedVersion: 2
     m_Bits: 193
+  moveSpeed: 1000
+  GroundedDistance: 0.001
+  halfExtent: {x: 0, y: 0, z: 0}
+  Grounded: 1
+  HalfSize: 0.125
+  snapped: 0
   <canInteract>k__BackingField: 1
+  <TextUI>k__BackingField: LMB
+  <TextSizeUI>k__BackingField: 12
 --- !u!54 &475244312
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -654,7 +658,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: E
+  m_text: LMB
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -681,8 +685,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
-  m_fontSizeBase: 18
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -765,8 +769,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02afbc6e913a8a9469a61b16d07f156b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIText: E
   isActive: 0
   <canInteract>k__BackingField: 1
+  <TextUI>k__BackingField: E
+  <TextSizeUI>k__BackingField: 18
 --- !u!65 &635479220
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1652,7 +1659,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -32.25}
-  m_SizeDelta: {x: 25, y: 25}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1174802182
 MonoBehaviour:
@@ -3153,6 +3160,7 @@ MonoBehaviour:
     m_Bits: 128
   CursorUI: {fileID: 762864217}
   InteractUI: {fileID: 920331143}
+  InteractTextUI: {fileID: 554059414}
 --- !u!1 &2114283753834967212
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Button : MonoBehaviour, IInteractable
 {
+    [SerializeField] private string UIText;
     [SerializeField]private bool isActive;
     [field: SerializeField] public bool canInteract { get ; set ; }
-
+    [field: SerializeField] public string TextUI { get; set; }
+    [field: SerializeField] public int TextSizeUI { get; set; }
     public void OnInteract()
     {
         if (canInteract)

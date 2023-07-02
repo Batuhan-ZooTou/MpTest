@@ -4,19 +4,24 @@ using UnityEngine;
 
 public class PhysicObject : MonoBehaviour, IObjectGrabable, IInteractable
 {
-    [SerializeField] private Rigidbody objectRigidbody;
-    [SerializeField] private Transform objectGrabPointTransform;
-    [SerializeField] private float moveSpeed;
-    public bool snapped;
-    public float HalfSize;
+    [Header("Interactable")]
+    [SerializeField] private bool isActive;
+    [SerializeField] private string UIText;
     [Header("PhysicObjectGrounded")]
-    [SerializeField] private bool Grounded = true;
+    [SerializeField] private Transform objectGrabPointTransform;
+    [SerializeField] private Rigidbody objectRigidbody;
+    [SerializeField] private LayerMask GroundLayers;
+    [SerializeField] private float moveSpeed;
     [SerializeField] private float GroundedDistance = 0.001f;
     [SerializeField] private Vector3 halfExtent;
-    [SerializeField] private LayerMask GroundLayers;
+    [SerializeField] private bool Grounded = true;
+    public float HalfSize;
+    public bool snapped;
     //Interface
     #region
     [field: SerializeField] public bool canInteract { get; set; }
+    [field: SerializeField] public string TextUI { get; set; }
+    [field: SerializeField] public int TextSizeUI { get; set; }
     public void Drop()
     {
         objectGrabPointTransform = null;
@@ -39,7 +44,10 @@ public class PhysicObject : MonoBehaviour, IObjectGrabable, IInteractable
     {
         if (canInteract)
         {
-            //do something
+            if (canInteract)
+            {
+                isActive = !isActive;
+            }
         }
     }
     public void Highlight()

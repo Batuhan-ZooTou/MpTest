@@ -13,6 +13,8 @@ public interface IObjectGrabable
 
 public interface IInteractable
 {
+    public string TextUI { get; set; }
+    public int TextSizeUI { get; set; }
     public bool canInteract { get;  set; }
     public void Highlight();
     public void DeHighlight();
