@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using System;
 using TMPro;
 public class PlayerInteract : MonoBehaviour
 {
@@ -30,7 +29,6 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] GameObject InteractUI;
     [SerializeField] TextMeshProUGUI InteractTextUI;
 
-    public event EventHandler OnInteract;
     private Vector3 defaultGrabPoint;
     Ray ray;
     RaycastHit hit;
