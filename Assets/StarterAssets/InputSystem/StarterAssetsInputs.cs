@@ -2,10 +2,11 @@ using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
+using Unity.Netcode;
 
 namespace StarterAssets
 {
-	public class StarterAssetsInputs : MonoBehaviour
+	public class StarterAssetsInputs : NetworkBehaviour
 	{
 		[Header("Character Input Values")]
 		public Vector2 move;
@@ -20,6 +21,11 @@ namespace StarterAssets
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
+		public override void OnNetworkSpawn()
+		{
+			//If this is not the owner, turn of player inputs
+			if (!IsOwner) gameObject.GetComponent<PlayerInput>().enabled = false;
+		}
 #if ENABLE_INPUT_SYSTEM
 		public void OnMove(InputValue value)
 		{
@@ -46,19 +52,35 @@ namespace StarterAssets
 #endif
 		public void OnMove(InputAction.CallbackContext context)
 		{
-			move = context.ReadValue<Vector2>();
+            if (IsOwner)
+            {
+				move = context.ReadValue<Vector2>();
+
+			}
 		}
 		public void OnLook(InputAction.CallbackContext context)
 		{
-			look = context.ReadValue<Vector2>();
+			if (IsOwner)
+			{
+				look = context.ReadValue<Vector2>();
+
+			}
 		}
 		public void OnJump(InputAction.CallbackContext context)
 		{
-			jump = context.ReadValueAsButton();
+			if (IsOwner)
+			{
+				jump = context.ReadValueAsButton();
+
+			}
 		}
 		public void OnSprint(InputAction.CallbackContext context)
 		{
-			sprint = context.ReadValueAsButton();
+			if (IsOwner)
+			{
+				sprint = context.ReadValueAsButton();
+
+			}
 		}
 
 		public void MoveInput(Vector2 newMoveDirection)

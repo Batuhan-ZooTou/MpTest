@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PhysicObject : MonoBehaviour, IObjectGrabable, IInteractable
+public class PhysicObject : NetworkBehaviour, IObjectGrabable, IInteractable
 {
     [Header("Interactable")]
     [SerializeField] private bool isActive;
@@ -27,6 +28,29 @@ public class PhysicObject : MonoBehaviour, IObjectGrabable, IInteractable
         objectGrabPointTransform = null;
         objectRigidbody.useGravity = true;
     }
+   [ServerRpc(RequireOwnership =false)]
+   public void DropServerRpc()
+   {
+       DropClientRpc();
+   }
+   [ClientRpc]
+   public void DropClientRpc()
+   {
+       objectGrabPointTransform = null;
+       objectRigidbody.useGravity = true;
+   }
+   [ServerRpc(RequireOwnership = false)]
+   public void GrabServerRpc(NetworkObjectReference position)
+   {
+       GrabClientRpc(position);
+   }
+   [ClientRpc]
+   public void GrabClientRpc(NetworkObjectReference position)
+   {
+        position.TryGet(out NetworkObject playerInteract);
+        this.objectGrabPointTransform = playerInteract.GetComponent<PlayerInteract>().objectGrabPointTransform;
+       objectRigidbody.useGravity = false;
+   }
     public void Grab(Transform position)
     {
         this.objectGrabPointTransform = position;

@@ -2,6 +2,7 @@
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
+using Unity.Netcode;
 
 namespace StarterAssets
 {
@@ -9,7 +10,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : MonoBehaviour
+	public class FirstPersonController : NetworkBehaviour
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -72,8 +73,7 @@ namespace StarterAssets
 #endif
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
-		private GameObject _mainCamera;
-
+		//public Camera _mainCamera;
 		private const float _threshold = 0.01f;
 		
 		private bool IsCurrentDeviceMouse
@@ -90,22 +90,22 @@ namespace StarterAssets
 
 		private void Awake()
 		{
-			// get a reference to our main camera
-			if (_mainCamera == null)
-			{
-				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-			}
+			
 		}
 
 		private void Start()
 		{
+            if (IsOwner)
+            {
+				PlayerCamera.Instance.SetFollowTarger(CinemachineCameraTarget.transform);
+            }
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
+#endif		
 
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
@@ -114,6 +114,10 @@ namespace StarterAssets
 
 		private void Update()
 		{
+            if (!IsOwner)
+            {
+				return;
+            }
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
@@ -121,6 +125,10 @@ namespace StarterAssets
 
 		private void LateUpdate()
 		{
+			if (!IsOwner)
+			{
+				return;
+			}
 			CameraRotation();
 		}
 
@@ -178,7 +186,6 @@ namespace StarterAssets
 				transform.Rotate(Vector3.up * _rotationVelocity);
 			}
 		}
-
 		private void Move()
 		{
 			// set target speed based on move speed, sprint speed and if sprint is pressed

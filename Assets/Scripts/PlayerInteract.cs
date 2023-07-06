@@ -4,12 +4,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using TMPro;
-public class PlayerInteract : MonoBehaviour
+using Unity.Netcode;
+
+public class PlayerInteract : NetworkBehaviour
 {
-    public static PlayerInteract Instance;
+    public static PlayerInteract Instance { get; private set; }
 
     [SerializeField] private Transform cam;
-    [SerializeField] private Transform objectGrabPointTransform;
+    [SerializeField] public Transform objectGrabPointTransform;
     [SerializeField] private Collider player;
     [SerializeField] public PhysicObject grabbedObject;
     [SerializeField] private IInteractable Interactable;
@@ -38,6 +40,10 @@ public class PlayerInteract : MonoBehaviour
     {
         Instance = this;
     }
+    private void Start()
+    {
+        cam = PlayerCamera.Instance.transform;
+    }
     //Inputs
     #region 
     public void OnScrollWheel(InputAction.CallbackContext context)
@@ -65,13 +71,17 @@ public class PlayerInteract : MonoBehaviour
     }
     public void OnLMB(InputAction.CallbackContext context)
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         if (context.started)
         {
             //dropping with lmb
             if (grabbedObject != null)
             {
                 Physics.IgnoreCollision(player, grabbedObject.GetComponent<Collider>(), false);
-                grabbedObject.Drop();
+                grabbedObject.DropServerRpc();
                 grabbedObject = null;
             }
             else if (Interactable != null)
@@ -83,14 +93,20 @@ public class PlayerInteract : MonoBehaviour
                     {
                         Physics.IgnoreCollision(player, grabbedObject.GetComponent<Collider>(), true);
                         objectGrabPointTransform.position = defaultGrabPoint;
-                        grabbedObject.Grab(objectGrabPointTransform);
+                        grabbedObject.GrabServerRpc(NetworkObject);
+
                     }
                 }
             }
         }
     }
+
     public void OnRMB(InputAction.CallbackContext context)
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         if (context.started)
         {
             //throwing with rmb
@@ -98,7 +114,7 @@ public class PlayerInteract : MonoBehaviour
             {
                 grabbedObject.Throw(cam, throwForce);
                 Physics.IgnoreCollision(player, grabbedObject.GetComponent<Collider>(), false);
-                grabbedObject.Drop();
+                grabbedObject.DropServerRpc();
                 grabbedObject = null;
             }
         }
@@ -116,7 +132,7 @@ public class PlayerInteract : MonoBehaviour
     {
         AdjuctGrabPoint();
         CheckForInteractables();
-        UpdateCursor();
+        //UpdateCursor();
         defaultGrabPoint = cam.position + cam.forward * holdDistance;
     }
     public void AdjuctGrabPoint()

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class Button : MonoBehaviour, IInteractable
+public class Button : NetworkBehaviour, IInteractable
 {
     [SerializeField] private string UIText;
     [SerializeField]private bool isActive;
